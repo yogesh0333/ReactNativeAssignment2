@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const DataTable = props => {
+const DisplayData = props => {
   return (
     <View style={styles.container}>
       <View style={styles.data}>
@@ -24,11 +24,10 @@ const DataTable = props => {
   );
 };
 
-export default DataTable;
-
+export default DisplayData;
 const styles = StyleSheet.create({
   container: {
-    borderColor: '#2E3436',
+    borderColor: 'black',
     borderWidth: 1,
     borderRadius: 25,
     margin: 20,

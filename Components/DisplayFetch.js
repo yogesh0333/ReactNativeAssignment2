@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import DataTable from './DataTable';
 
 export default class DisplayFetch extends Component {
@@ -69,8 +70,12 @@ export default class DisplayFetch extends Component {
   };
 
   render() {
+    const state = this.state;
     return (
       <View style={styles.container}>
+        {/* <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+          <Row data={state.title} style={styles.head} textStyle={styles.text} />
+        </Table> */}
         {this.state.isLoading ? (
           <View style={styles.bottomLoader}>
             <ActivityIndicator
