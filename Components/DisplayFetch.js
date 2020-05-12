@@ -4,11 +4,12 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
+  Text,
   TouchableOpacity,
 } from 'react-native';
-import DisplayData from './DisplayData';
+import DataTable from './DataTable';
 
-export default class FetchData extends Component {
+export default class DisplayFetch extends Component {
   constructor() {
     super();
 
@@ -23,7 +24,11 @@ export default class FetchData extends Component {
 
   componentDidMount() {
     this.apiCall();
+    this._interval = setInterval(() => {
+      this.apiCall();
+    }, 10000);
   }
+
   apiCall = () => {
     var that = this;
     that.page = that.page + 1;
@@ -47,7 +52,6 @@ export default class FetchData extends Component {
           isLoading: false,
           setOnLoad: true,
         });
-        console.log(responseJson);
       })
       .catch(error => {
         console.error(error);
@@ -66,27 +70,35 @@ export default class FetchData extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         {this.state.isLoading ? (
-          <ActivityIndicator size={100} color="#6CD0FA" style={styles.loader} />
+          <View style={styles.bottomLoader}>
+            <ActivityIndicator
+              size={100}
+              color="#6CD0FA"
+              style={styles.loader}
+            />
+          </View>
         ) : (
           <FlatList
             style={{width: '100%'}}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => index.toString()}
             data={this.state.responseList}
             initialNumToRender={4}
             maxToRenderPerBatch={1}
             onEndReachedThreshold={0.5}
-            onEndReached={({distanceFromEnd}) => {
-              this.apiCall();
-            }}
             renderItem={({item, index}) => (
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('DataDisplay', {
+                      data: item,
+                    });
+                  }}>
                   <View style={styles.viewStyle}>
-                    <DisplayData
+                    <DataTable
                       title={item.title}
-                      URL={item.URL}
+                      URL={item.url}
                       created_at={item.created_at}
                       author={item.author}
                     />
@@ -95,7 +107,6 @@ export default class FetchData extends Component {
               </View>
             )}
             showsVerticalScrollIndicator={true}
-            ListFooterComponent={this.footer}
           />
         )}
       </View>
@@ -103,4 +114,9 @@ export default class FetchData extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  bottomLoader: {
+    marginTop: '70%',
+  },
+  container: {backgroundColor: '#f2f2f2'},
+});
